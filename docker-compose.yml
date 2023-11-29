@@ -2,83 +2,66 @@ version: '2.2'
 services:
   nginx:
     build:
-      context: docker
-      dockerfile: ./nginx/nginx.dockerfile
-    container_name: nginx
+      context: ../docker-compose
+      dockerfile: nginx/nginx.dockerfile
+    container_name: nginx_$APP_NAME
     ports:
       - "8080:8080"
     volumes:
-      - .:/var/www/html/_app_
+      - ../:/var/www/html/$APP_NAME
     depends_on:
       - php
-      - mysql
       - redis
     networks:
       - laravel
   php:
     build:
-      context: docker
-      dockerfile: ./php/php.dockerfile
-    container_name: php
+      context: ../docker-compose
+      dockerfile: php/php.dockerfile
+    container_name: php_$APP_NAME
     ports:
       - "9000:9000"
     volumes:
-      - .:/var/www/html/_app_
-      - ./docker/php/local.ini:/etc/php/conf.d/local.ini
+      - ../:/var/www/html/$APP_NAME
+      - ./php/local.ini:/etc/php/conf.d/local.ini
     networks:
       - laravel
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'test'
-      MYSQL_USER: 'admin'
-      MYSQL_PASSWORD: 'WK7nkwNtb6E219iP'
-      MYSQL_ROOT_PASSWORD: 'eJrlaAPmy9DRMz4x'
-    ports:
-      - '3306:3306'
-    expose:
-      - '3306'
-    volumes:
-      - my-db:/var/lib/mysql
   redis:
     build:
-      context: docker
-      dockerfile: ./redis/redis.dockerfile
+      context: ../docker-compose
+      dockerfile: redis/redis.dockerfile
     restart: always
-    container_name: redis
+    container_name: redis_$APP_NAME
     ports:
       - "6379:6379"
     command: redis-server --save 20 1 --loglevel warning --requirepass secret
     volumes:
-      - ./docker/redis:/data
+      - ../docker-compose/redis/data:/data
     networks:
       - laravel
   composer:
     build:
-      context: docker
-      dockerfile: ./composer/composer.dockerfile
-    container_name: composer
+      context: ../docker-compose
+      dockerfile: composer/composer.dockerfile
+    container_name: composer_$APP_NAME
     volumes:
-      - .:/var/www/html/_app_
-    working_dir: /var/www/html/_app_
+      - ../:/var/www/html/$APP_NAME
+    working_dir: /var/www/html/$APP_NAME
     networks:
       - laravel
   artisan:
     build:
-      context: docker
-      dockerfile: ./php/php.dockerfile
-    container_name: artisan
+      context: ../docker-compose
+      dockerfile: php/php.dockerfile
+    container_name: artisan_$APP_NAME
     volumes:
-      - .:/var/www/html/
-    entrypoint: [ "php", "/var/www/html/_app_/artisan" ]
+      - ../:/var/www/html/code
+    entrypoint: [ "php", "/var/www/html/code/$APP_NAME/artisan" ]
     networks:
       - laravel
 volumes:
   redis:
     driver: local
-  my-db:
 networks:
   laravel:
     driver: bridge

@@ -6,12 +6,12 @@ ENV NGINXGROUP=nginx
 RUN sed -i "s/user www-data/user ${NGINXUSER}/g" /etc/nginx/nginx.conf
 RUN sed -i "s/group www-data/group ${NGINXGROUP}/g" /etc/nginx/nginx.conf
 
-RUN mkdir -p /var/www/html
+RUN mkdir -p /var/www/html/$APP_NAME
 
 COPY ./nginx/sites/*.conf /etc/nginx/conf.d/
 
-ADD nginx/certs/ap_sigap.test.pem /etc/nginx/certs/ap_sigap.test.pem
-ADD nginx/certs/ap_sigap.test.key /etc/nginx/certs/ap_sigap.test.key
+ADD nginx/certs/certificate.test.pem /etc/nginx/certs/certificate.test.pem
+ADD nginx/certs/certificate.test.key /etc/nginx/certs/certificate.test.key
 
 RUN chown -R ${NGINXUSER}:${NGINXUSER} /etc/nginx
 

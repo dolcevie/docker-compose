@@ -10,13 +10,13 @@ RUN sed -i "s/group = www-data/group = ${PHPGROUP}/g" /usr/local/etc/php-fpm.d/w
 
 #for tunel ssh
 RUN mkdir -p /home/.ssh
-ADD ../ssh/*.pem /home/.ssh
+ADD ../extras/ssh/*.pem /home/.ssh
 
 RUN chown -R ${PHPUSER}:${PHPUSER} /home/.ssh
 RUN chown -R ${PHPUSER}:${PHPUSER} /usr/local/etc
 
 # Set working directory
-WORKDIR /var/www/html/
+WORKDIR /var/www/html/$APP_NAME
 
 # Libs
 RUN apk add --no-cache tzdata libzip-dev libpng-dev libsodium libsodium-dev openssh-client
