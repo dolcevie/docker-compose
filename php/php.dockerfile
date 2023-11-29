@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine3.18
+FROM php:8.3-fpm-alpine
 
 ENV PHPGROUP=laravel
 ENV PHPUSER=laravel
@@ -14,12 +14,14 @@ ADD ../extras/ssh/*.pem /home/.ssh
 
 RUN chown -R ${PHPUSER}:${PHPUSER} /home/.ssh
 RUN chown -R ${PHPUSER}:${PHPUSER} /usr/local/etc
+RUN chown -R ${PHPUSER}:${PHPUSER} /var/www/html
 
 # Set working directory
-WORKDIR /var/www/html/$APP_NAME
+WORKDIR /var/www/html/code
 
+RUN apk update
 # Libs
-RUN apk add --no-cache tzdata libzip-dev libpng-dev libsodium libsodium-dev openssh-client
+RUN apk add --no-cache tzdata libzip-dev libpng-dev libsodium libsodium-dev openssh-client gd
 
 #set timezone
 ENV TZ=America/Mexico_City

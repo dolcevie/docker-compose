@@ -6,7 +6,7 @@ ENV NGINXGROUP=nginx
 RUN sed -i "s/user www-data/user ${NGINXUSER}/g" /etc/nginx/nginx.conf
 RUN sed -i "s/group www-data/group ${NGINXGROUP}/g" /etc/nginx/nginx.conf
 
-RUN mkdir -p /var/www/html/$APP_NAME
+RUN mkdir -p /var/www/html/code
 
 COPY ./nginx/sites/*.conf /etc/nginx/conf.d/
 

@@ -1,9 +1,9 @@
 server {
 
-    listen 8080 ssl;
+    listen 8080 ssl; #Change port
     index index.php index.html;
     server_name localhost;
-    root /var/www/html/$APP_NAME/public;
+    root /var/www/html/code/_APP_NAME/public; #Change _APP_NAME
 
     #add_header X-Frame-Options "SAMEORIGIN";
     #add_header X-XSS-Protection "1; mode=block";
